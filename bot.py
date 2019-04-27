@@ -46,7 +46,7 @@ def scrape_post_collect():
         # log for debugging
         print(post_info) 
         # sleep and repost in 24 hours
-        time.sleep(14400)
+        time.sleep(60)
         # resubmit the post
         post_id = submit_post(post_info)
         # append post_id and post_info to a dictionary for later parsing
