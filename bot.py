@@ -40,13 +40,13 @@ def submit_post(post_dict):
 def scrape_post_collect():
     posts = {}
     # for test purposes, we will try this four times
-    for _ in range(0,4):
+    for _ in range(0,1):
         # get a top post from r/pics
         post_info = get_post()
         # log for debugging
         print(post_info) 
         # sleep and repost in 24 hours
-        time.sleep(86400)
+        time.sleep(14400)
         # resubmit the post
         post_id = submit_post(post_info)
         # append post_id and post_info to a dictionary for later parsing
