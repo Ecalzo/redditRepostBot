@@ -1,23 +1,19 @@
 import time
 import praw
 import pandas as pd
+import bot_login
 
 def get_post(sub='pics'):
     '''
     Gets Post data
     Append this output to a list
     '''
-    reddit = praw.Reddit(client_id = 'cZmnXIzpaw3WRQ',
-                    client_secret = 'j73av9HZPuzEGvVly58sGD_R11U',
-                    user_agent = 'PRAW API tutorial Python Script by /u/cannablubber',
-                    username='cannablubber',
-                    password='102795'
-                )   
-    
+    reddit = bot_login.bot_login()
+                
     # dictionary to store the fetched info
     redditInfo = {}
     # obtaining the top post info and passing it to a dict
-    for submission in reddit.subreddit(sub).hot(limit=1):
+    for submission in reddit.subreddit(sub).hot(limit=2):
         redditInfo['title'] = submission.title
         redditInfo['url'] = submission.url
         redditInfo['subreddit'] = submission.subreddit
