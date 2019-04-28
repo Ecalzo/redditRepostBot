@@ -37,19 +37,23 @@ def scrape_post_collect():
     posts = {}
     # for test purposes, we will try this four times
     for _ in range(0,1):
-        # get a top post from r/pics
-        post_info = get_post()
-        # log for debugging
-        print(post_info) 
-        # sleep and repost in 24 hours
-        time.sleep(60)
-        # resubmit the post
-        post_id = submit_post(post_info)
-        # append post_id and post_info to a dictionary for later parsing
-        posts[post_id] = post_info
+        try:
+            # get a top post from r/pics
+            post_info = get_post()
+            # log for debugging
+            print(post_info) 
+            # sleep and repost in 24 hours
+            time.sleep(60)
+            # resubmit the post
+            post_id = submit_post(post_info)
+            # append post_id and post_info to a dictionary for later parsing
+            posts[post_id] = post_info
+        except:
+            print("failed")
     
     df = pd.DataFrame(posts)
     df.to_csv('output.csv')
+    print("output to output.csv")
 
 # Initialize the main function
 if __name__ == "__main__":

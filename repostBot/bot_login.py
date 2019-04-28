@@ -7,7 +7,7 @@ def bot_login():
                 user_agent = 'PRAW API tutorial Python Script',
                 username = os.getenv("reddit_username"),
                 password = os.getenv("reddit_password"))   
-                
+    
     print("logged in!")
 
     return reddit
