@@ -13,6 +13,7 @@ def get_post(sub='pics'):
     # dictionary to store the fetched info
     redditInfo = {}
     # obtaining the top post info and passing it to a dict
+    # I use limit=2 to skirt past the stickied post
     for submission in reddit.subreddit(sub).hot(limit=2):
         redditInfo['title'] = submission.title
         redditInfo['url'] = submission.url
@@ -35,25 +36,27 @@ def submit_post(post_dict):
 
 def scrape_post_collect():
     posts = {}
-    # for test purposes, we will try this four times
-    for _ in range(0,1):
+    # for test purposes, we will try this ten times
+    for _ in range(0,10):
         try:
+            print("Getting post")
             # get a top post from r/pics
             post_info = get_post()
             # log for debugging
             print(post_info) 
             # sleep and repost in 24 hours
-            time.sleep(60)
+            time.sleep(86400)
             # resubmit the post
             post_id = submit_post(post_info)
             # append post_id and post_info to a dictionary for later parsing
             posts[post_id] = post_info
+            print("posted something new!")
         except:
             print("failed")
     
     df = pd.DataFrame(posts)
     df.to_csv('output.csv')
-    print("output to output.csv")
+    print("output added to output.csv")
 
 # Initialize the main function
 if __name__ == "__main__":
