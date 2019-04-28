@@ -53,9 +53,10 @@ def scrape_post_collect():
         posts[post_id] = post_info
     
     df = pd.DataFrame(posts)
-    df.to_csv('trial_output.csv')
+    df.to_csv('output.csv')
 
 # Initialize the main function
-scrape_post_collect()
+if __name__ == "__main__":
+    scrape_post_collect()
         
     
