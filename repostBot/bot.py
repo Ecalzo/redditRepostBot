@@ -2,6 +2,9 @@ import time
 import praw
 import pandas as pd
 import bot_login
+from datetime import datetime
+import pymongo
+import mongo_setup
 
 def get_post(sub='pics'):
     '''
@@ -9,7 +12,8 @@ def get_post(sub='pics'):
     Append this output to a list
     '''
     reddit = bot_login.bot_login()
-                
+    # Get current time and format:
+    current_time = datetime.now().strftime("%m-%d-%Y")
     # dictionary to store the fetched info
     redditInfo = {}
     # obtaining the top post info and passing it to a dict
@@ -18,6 +22,7 @@ def get_post(sub='pics'):
         redditInfo['title'] = submission.title
         redditInfo['url'] = submission.url
         redditInfo['subreddit'] = submission.subreddit
+        redditInfo['time'] = current_time
 
     # return the dictionary (to be appended to a list)
     return redditInfo
@@ -35,8 +40,8 @@ def submit_post(post_dict):
     
 
 def scrape_post_collect():
-    posts = {}
     # for test purposes, we will try this ten times
+    # TODO: change to while true: to run indefinitely
     for _ in range(0,10):
         try:
             print("Getting post")
@@ -49,15 +54,19 @@ def scrape_post_collect():
             # resubmit the post
             post_id = submit_post(post_info)
             # append post_id and post_info to a dictionary for later parsing
-            posts[post_id] = post_info
+            print("preparing to append to MongoDB")
+            # Creating post dictionary
+            post = {}
+            # Appending to post in format {post_id:{post_info}}
+            post[post_id] = post_info
+            # Initialize MongoDB instance
+            collection = mongo_setup.mongo_login()
+            # insert post into MongoDB Collection
+            collection.insert_one(post)
             print("posted something new!")
         except:
             print("failed")
     
-    df = pd.DataFrame(posts)
-    df.to_csv('output.csv')
-    print("output added to output.csv")
-
 # Initialize the main function
 if __name__ == "__main__":
     scrape_post_collect()
