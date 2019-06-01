@@ -23,7 +23,8 @@ def get_post(sub='pics'):
         redditInfo['url'] = submission.url
         redditInfo['subreddit'] = submission.subreddit
         redditInfo['time'] = current_time
-
+    # Append the overall user karma at this point in time
+    redditInfo['karma'] = reddit.user.karma()
     # return the dictionary (to be appended to a list)
     return redditInfo
 
