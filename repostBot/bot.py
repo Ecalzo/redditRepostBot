@@ -17,8 +17,8 @@ def get_post(sub='pics'):
     # dictionary to store the fetched info
     redditInfo = {}
     # obtaining the top post info and passing it to a dict
-    # I use limit=2 to skirt past the stickied post
-    for submission in reddit.subreddit(sub).hot(limit=2):
+    # Use the top of the week and go a few posts down for an inconspicuous repost
+    for submission in reddit.subreddit(sub).top('week', limit=20):
         redditInfo['title'] = submission.title
         redditInfo['url'] = submission.url
         redditInfo['subreddit'] = submission.subreddit
@@ -41,31 +41,33 @@ def submit_post(post_dict):
 
 def scrape_post_collect():
     # for test purposes, we will try this ten times
+    subreddits = ['pics','me_irl','dankmemes','Eyebleach']
     # TODO: change to while true: to run indefinitely
     for _ in range(0,10):
-        try:
-            print("Getting post")
-            # get a top post from r/pics
-            post_info = get_post()
-            # log for debugging
-            print(post_info) 
-            # sleep and repost in 24 hours
-            time.sleep(86400)
-            # resubmit the post
-            post_id = submit_post(post_info)
-            # append post_id and post_info to a dictionary for later parsing
-            print("preparing to append to MongoDB")
-            # Creating post dictionary
-            post = {}
-            # Appending to post in format {post_id:{post_info}}
-            post[post_id] = post_info
-            # Initialize MongoDB instance
-            collection = mongo_setup.mongo_login()
-            # insert post into MongoDB Collection
-            collection.insert_one(post)
-            print("posted something new!")
-        except:
-            print("failed")
+        for sub in subreddits:
+            try:
+                print("Getting post")
+                # get a top post from r/pics
+                post_info = get_post(sub)
+                # log for debugging
+                print(post_info) 
+                # sleep and repost in 24 hours
+                time.sleep(86400)
+                # resubmit the post
+                post_id = submit_post(post_info)
+                # append post_id and post_info to a dictionary for later parsing
+                print("preparing to append to MongoDB")
+                # Creating post dictionary
+                post = {}
+                # Appending to post in format {post_id:{post_info}}
+                post[post_id] = post_info
+                # Initialize MongoDB instance
+                collection = mongo_setup.mongo_login()
+                # insert post into MongoDB Collection
+                collection.insert_one(post)
+                print("posted something new at: ", datetime.now())
+            except:
+                print("failed at: ", datetime.now())
     
 # Initialize the main function
 if __name__ == "__main__":

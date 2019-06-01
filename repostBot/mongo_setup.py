@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import os
 
-def mongo_login():
+def mongo_login_and_insert(to_insert):
     mongo_user = os.getenv("mongo_user")
     mongo_pw = os.getenv("mongo_pw")
 
