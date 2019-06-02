@@ -11,4 +11,5 @@ def mongo_login_and_insert(to_insert):
     db = client.redditBotDB
     collection = db.redditBotCollection
     
-    return collection
+    # Insert into db
+    collection.insert_one(to_insert)

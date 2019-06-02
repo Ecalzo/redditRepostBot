@@ -51,10 +51,12 @@ def scrape_post_collect():
                 # get a top post from r/pics
                 post_info = get_post(sub)
                 # log for debugging
-                print(post_info) 
+                print(post_info)
+                print('sleeping... ') 
                 # sleep and repost in 24 hours
                 time.sleep(86400)
                 # resubmit the post
+                print('Awake! posting to Reddit!')
                 post_id = submit_post(post_info)
                 # append post_id and post_info to a dictionary for later parsing
                 print("preparing to append to MongoDB")
@@ -62,10 +64,14 @@ def scrape_post_collect():
                 post = {}
                 # Appending to post in format {post_id:{post_info}}
                 post[post_id] = post_info
-                # Initialize MongoDB instance
-                collection = mongo_setup.mongo_login()
-                # insert post into MongoDB Collection
-                collection.insert_one(post)
+                # Initialize MongoDB instance and push info
+                try:
+                    # insert post into MongoDB Collection
+                    print('attempting to initalize and push to mongoDB')
+                    mongo_setup.mongo_login_and_insert(post)
+                except Exception as e: 
+                    print('could not initialize MongoDB')
+                    print(e)
                 print("posted something new at: ", datetime.now())
             except:
                 print("failed at: ", datetime.now())
