@@ -24,7 +24,16 @@ def get_post(sub='pics'):
         redditInfo['subreddit'] = submission.subreddit
         redditInfo['time'] = current_time
     # Append the overall user karma at this point in time
-    redditInfo['karma'] = reddit.user.karma()
+    # subroutine to clean the user karma (remove objects incompatible with Mongo)
+    karma = reddit.user.karma()
+    cleaned_karma = {}
+    for key, value in karma.items():
+        # extract subreddit display name as str
+        new_key = key.display_name
+        # write to cleaned karma dictionary
+        cleaned_karma[new_key] = value    
+    redditInfo['karma'] = cleaned_karma
+    
     # return the dictionary (to be appended to a list)
     return redditInfo
 
@@ -42,7 +51,7 @@ def submit_post(post_dict):
 
 def scrape_post_collect():
     # for test purposes, we will try this ten times
-    subreddits = ['pics','me_irl','dankmemes','Eyebleach']
+    subreddits = ['pics','me_irl','dankmemes','eyebleach']
     # TODO: change to while true: to run indefinitely
     for _ in range(0,10):
         for sub in subreddits:
@@ -54,15 +63,17 @@ def scrape_post_collect():
                 print(post_info)
                 print('sleeping... ') 
                 # sleep and repost in 24 hours
-                time.sleep(86400)
+                time.sleep(12000)
                 # resubmit the post
                 print('Awake! posting to Reddit!')
-                post_id = submit_post(post_info)
+                submitted = submit_post(post_info)
+                # convert to integer value, not post object
+                post_id = submitted.id
                 # append post_id and post_info to a dictionary for later parsing
                 print("preparing to append to MongoDB")
                 # Creating post dictionary
                 post = {}
-                # Appending to post in format {post_id:{post_info}}
+                # Appending to post in format { post_id: { post_info } }
                 post[post_id] = post_info
                 # Initialize MongoDB instance and push info
                 try:
