@@ -61,6 +61,7 @@ def scrape_post_collect():
                 print("Getting post")
                 # get a top post from r/pics
                 post_info = get_post(sub)
+                post_info['subreddit'] = post_info['subreddit'].display_name
                 # log for debugging
                 print(post_info)
                 print('sleeping... ') 

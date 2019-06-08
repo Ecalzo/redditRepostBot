@@ -11,3 +11,4 @@ To build on this, I want to leverage Python's Flask library and the Plotly (or p
 
 ## Updates:
 * Update 4/30/2019: Bot is in trial period, GitHub code has been updated to push collected post data to MongoDB, however, this repo is not tied to Heroku and the updated bot will be deployed once the trial period has finished. 
+* Update 6/8/2019: Some functionality has been added to the bot. It currently cycles through a few subreddits and a random choice function has been included to avoid reposting the same post, decreasing the potential of being detected by an automod. The bot also pushes metadata to a MongoDB database that will eventually be used to build out some real-time visualizations/tracker.
