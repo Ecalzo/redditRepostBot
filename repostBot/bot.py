@@ -5,6 +5,7 @@ import bot_login
 from datetime import datetime
 import pymongo
 import mongo_setup
+import random
 
 def get_post(sub='pics'):
     '''
@@ -16,9 +17,10 @@ def get_post(sub='pics'):
     current_time = datetime.now().strftime("%m-%d-%Y")
     # dictionary to store the fetched info
     redditInfo = {}
+    randomInt = random.randint(3,40)
     # obtaining the top post info and passing it to a dict
     # Use the top of the week and go a few posts down for an inconspicuous repost
-    for submission in reddit.subreddit(sub).top('week', limit=20):
+    for submission in reddit.subreddit(sub).top('week', limit=randomInt):
         redditInfo['title'] = submission.title
         redditInfo['url'] = submission.url
         redditInfo['subreddit'] = submission.subreddit
