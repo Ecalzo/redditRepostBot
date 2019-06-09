@@ -63,7 +63,7 @@ def scrape_post_collect():
                 post_info = get_post(sub)
                 post_info['subreddit'] = post_info['subreddit'].display_name
                 # log for debugging
-                print(post_info)
+                print(post_info['title'],post_info['url'])
                 print('sleeping... ') 
                 # sleep and repost in 24 hours
                 time.sleep(12000)
@@ -87,8 +87,9 @@ def scrape_post_collect():
                     print('could not initialize MongoDB')
                     print(e)
                 print("posted something new at: ", datetime.now())
-            except:
+            except Exception as e:
                 print("failed at: ", datetime.now())
+                print(e)
     
 # Initialize the main function
 if __name__ == "__main__":
