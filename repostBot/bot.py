@@ -61,7 +61,6 @@ def scrape_post_collect():
                 print("Getting post")
                 # get a top post from r/pics
                 post_info = get_post(sub)
-                post_info['subreddit'] = post_info['subreddit'].display_name
                 # log for debugging
                 print(post_info['title'],post_info['url'])
                 print('sleeping... ') 
@@ -72,7 +71,8 @@ def scrape_post_collect():
                 submitted = submit_post(post_info)
                 # convert to integer value, not post object
                 post_id = submitted.id
-                # append post_id and post_info to a dictionary for later parsing
+                # Convert subreddit name to string to store in MongoDB
+                post_info['subreddit'] = post_info['subreddit'].display_name
                 print("preparing to append to MongoDB")
                 # Creating post dictionary
                 post = {}
