@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+files:
+  - source: /repostBot
+    destination: /home/repostBot
+  - source: requirements.txt
+    destination: /home/repostBot/requirements.txt
+hooks:
+  AfterInstall:
+    - location: scripts/install_dependencies
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/run_file
+      timeout: 300
+      runas: root
