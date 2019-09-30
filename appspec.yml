@@ -1,10 +1,8 @@
 version: 0.0
 os: linux
 files:
-  - source: /repostBot
-    destination: /home/repostBot
-  - source: requirements.txt
-    destination: /home/repostBot/requirements.txt
+  - source: /
+    destination: /home/
 hooks:
   AfterInstall:
     - location: scripts/install_dependencies
